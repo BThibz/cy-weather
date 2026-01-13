@@ -63,7 +63,7 @@ async def test_get_current_weather(service, mocker):
 
     mocker.patch("httpx.AsyncClient.get", new=mock_get)
 
-    result = await service.get_current_weather("Paris")
+    result = service.get_current_weather("Paris")
 
     assert isinstance(result, WeatherResponse)
     assert result.city == "Paris"
@@ -107,7 +107,7 @@ async def test_get_forecast(service, mocker):
 
     mocker.patch("httpx.AsyncClient.get", new=mock_get)
 
-    result = await service.get_forecast("Marseille")
+    result = service.get_forecast("Marseille")
 
     assert isinstance(result, ForecastResponse)
     assert len(result.forecast) == 2
