@@ -54,10 +54,10 @@ async def test_get_current_weather(service, mocker):
 
     # Mock de la réponse HTTP
     mock_resp = AsyncMock()
-    mock_resp.raise_for_status.return_value = None
-    mock_resp.json.return_value = mock_response_data
+    mock_resp.raise_for_status = lambda: None   # synchrone
+    mock_resp.json = lambda: mock_response_data # synchrone
 
-    # Patch httpx.AsyncClient.get pour retourner la réponse mockée
+    # Patch httpx.AsyncClient.get
     mocker.patch("httpx.AsyncClient.get", return_value=mock_resp)
 
     # --- Appel de la méthode ---
@@ -99,10 +99,10 @@ async def test_get_forecast(service, mocker):
 
     # Mock de la réponse HTTP
     mock_resp = AsyncMock()
-    mock_resp.raise_for_status.return_value = None
-    mock_resp.json.return_value = mock_response_data
+    mock_resp.raise_for_status = lambda: None
+    mock_resp.json = lambda: mock_response_data
 
-    # Patch httpx.AsyncClient.get pour retourner la réponse mockée
+    # Patch httpx.AsyncClient.get
     mocker.patch("httpx.AsyncClient.get", return_value=mock_resp)
 
     # --- Appel de la méthode ---
