@@ -1,3 +1,4 @@
+import math
 import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import AsyncMock
@@ -54,7 +55,7 @@ def test_get_current_weather_success(mock_weather_service):
     assert response.status_code == 200
     data = response.json()
     assert data["city"] == "Paris"
-    assert data["weather"]["temperature"] == 20.0
+    assert math.isclose(data["weather"]["temperature"], 20.0, rel_tol=1e-9)
     assert data["weather"]["description"] == "Ciel dégagé"
 
 def test_get_current_weather_404(mock_weather_service):

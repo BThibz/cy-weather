@@ -1,3 +1,4 @@
+import math
 import pytest
 from datetime import datetime
 from unittest.mock import AsyncMock
@@ -52,9 +53,11 @@ async def test_get_current_weather(service, mocker):
         }
     }
 
-    async def mock_get(*args, **kwargs):
+    def mock_get(*args, **kwargs):
         class MockResp:
-            def raise_for_status(self): pass
+            def raise_for_status(self):
+                # Méthode vide pour simuler une réponse sans erreur HTTP
+                pass
             def json(self): return mock_response
         return MockResp()
 
@@ -64,7 +67,7 @@ async def test_get_current_weather(service, mocker):
 
     assert isinstance(result, WeatherResponse)
     assert result.city == "Paris"
-    assert result.weather.temperature == 20.0
+    assert math.isclose(result.weather.temperature, 20.0, rel_tol=1e-9)
     assert result.weather.description == "Ciel dégagé"
 
 
@@ -94,9 +97,11 @@ async def test_get_forecast(service, mocker):
         }
     }
 
-    async def mock_get(*args, **kwargs):
+    def mock_get(*args, **kwargs):
         class MockResp:
-            def raise_for_status(self): pass
+            def raise_for_status(self):
+                # Méthode vide pour simuler une réponse sans erreur HTTP
+                pass
             def json(self): return mock_response
         return MockResp()
 

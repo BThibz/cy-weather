@@ -3,10 +3,13 @@ from typing import List, Optional
 from datetime import datetime
 
 
+ct_nomVille = "Nom de la ville"
+
+
 class WeatherRequest(BaseModel):
     """DTO pour la requête météo"""
 
-    city: str = Field(..., description="Nom de la ville", min_length=1)
+    city: str = Field(..., description=ct_nomVille, min_length=1)
     country_code: Optional[str] = Field(None, description="Code pays ISO (ex: FR, US)")
 
 
@@ -27,7 +30,7 @@ class CurrentWeatherData(BaseModel):
 class WeatherResponse(BaseModel):
     """DTO pour la réponse météo actuelle"""
 
-    city: str = Field(..., description="Nom de la ville")
+    city: str = Field(..., description=ct_nomVille)
     country: str = Field(..., description="Code pays")
     timestamp: datetime = Field(..., description="Horodatage de la donnée")
     weather: CurrentWeatherData
@@ -53,7 +56,7 @@ class DailyForecastData(BaseModel):
 class ForecastResponse(BaseModel):
     """DTO pour la réponse prévisions 7 jours"""
 
-    city: str = Field(..., description="Nom de la ville")
+    city: str = Field(..., description=ct_nomVille)
     country: str = Field(..., description="Code pays")
     forecast: List[DailyForecastData] = Field(
         ..., description="Liste des prévisions pour les 7 prochains jours"

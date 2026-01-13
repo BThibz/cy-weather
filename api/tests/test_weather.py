@@ -1,6 +1,8 @@
+import math
 import pytest
 from datetime import datetime
 from pydantic import ValidationError
+from datetime import datetime, timezone
 
 from src.models.Weather import (
     WeatherRequest,
@@ -51,8 +53,8 @@ def test_current_weather_data_valid():
         icon="01d",
     )
 
-    assert data.temperature == 20.5
-    assert data.feels_like == 21.0
+    assert math.isclose(data.temperature, 20.5, rel_tol=1e-9)
+    assert math.isclose(data.feels_like, 21.0, rel_tol=1e-9)
     assert data.humidity == 60
     assert data.description == "clear sky"
 
@@ -88,13 +90,13 @@ def test_weather_response_valid():
     response = WeatherResponse(
         city="Lyon",
         country="FR",
-        timestamp=datetime.utcnow(),
+        timestamp = datetime.now(timezone.utc),
         weather=weather,
     )
 
     assert response.city == "Lyon"
     assert response.country == "FR"
-    assert response.weather.temperature == 18.0
+    assert math.isclose(response.weather.temperature, 18.0, rel_tol=1e-9)
 
 
 def test_weather_response_missing_weather():
@@ -102,7 +104,7 @@ def test_weather_response_missing_weather():
         WeatherResponse(
             city="Lyon",
             country="FR",
-            timestamp=datetime.utcnow(),
+            timestamp = datetime.now(timezone.utc),
         )
 
 
@@ -124,7 +126,7 @@ def test_daily_forecast_with_precipitation():
         precipitation_probability=80.0,
     )
 
-    assert forecast.precipitation_probability == 80.0
+    assert math.isclose(forecast.precipitation_probability, 80.0, rel_tol=1e-9)
 
 
 def test_daily_forecast_without_precipitation():
