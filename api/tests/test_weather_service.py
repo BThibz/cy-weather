@@ -61,7 +61,7 @@ async def test_get_current_weather(service, mocker):
     # Patch httpx.AsyncClient.get pour retourner la réponse mockée
     mocker.patch("httpx.AsyncClient.get", new=AsyncMock(return_value=mock_resp))
 
-    result = service.get_current_weather("Paris")
+    result = await service.get_current_weather("Paris")
 
     assert isinstance(result, WeatherResponse)
     assert result.city == "Paris"
@@ -103,7 +103,7 @@ async def test_get_forecast(service, mocker):
     # Patch httpx.AsyncClient.get pour retourner la réponse mockée
     mocker.patch("httpx.AsyncClient.get", new=AsyncMock(return_value=mock_resp))
 
-    result = service.get_forecast("Marseille")
+    result = await service.get_forecast("Marseille")
 
     assert isinstance(result, ForecastResponse)
     assert len(result.forecast) == 2
