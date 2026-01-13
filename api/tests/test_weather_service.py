@@ -59,7 +59,7 @@ async def test_get_current_weather(service, mocker):
     mock_resp.json.return_value = mock_response
 
     # Patch httpx.AsyncClient.get pour retourner la réponse mockée
-    mocker.patch("httpx.AsyncClient.get", new=AsyncMock(return_value=mock_resp))
+    mocker.patch("httpx.AsyncClient.get", return_value=mock_resp)
 
     result = await service.get_current_weather("Paris")
 
@@ -101,7 +101,7 @@ async def test_get_forecast(service, mocker):
     mock_resp.json.return_value = mock_response
 
     # Patch httpx.AsyncClient.get pour retourner la réponse mockée
-    mocker.patch("httpx.AsyncClient.get", new=AsyncMock(return_value=mock_resp))
+    mocker.patch("httpx.AsyncClient.get", return_value=mock_resp)
 
     result = await service.get_forecast("Marseille")
 
