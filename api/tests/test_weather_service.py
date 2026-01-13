@@ -53,15 +53,13 @@ async def test_get_current_weather(service, mocker):
         }
     }
 
-    def mock_get(*args, **kwargs):
-        class MockResp:
-            def raise_for_status(self):
-                # Méthode vide pour simuler une réponse sans erreur HTTP
-                pass
-            def json(self): return mock_response
-        return MockResp()
+    
+    mock_resp = AsyncMock()
+    mock_resp.raise_for_status.return_value = None
+    mock_resp.json.return_value = mock_response
 
-    mocker.patch("httpx.AsyncClient.get", new=mock_get)
+    # Patch httpx.AsyncClient.get pour retourner la réponse mockée
+    mocker.patch("httpx.AsyncClient.get", new=AsyncMock(return_value=mock_resp))
 
     result = service.get_current_weather("Paris")
 
@@ -97,15 +95,13 @@ async def test_get_forecast(service, mocker):
         }
     }
 
-    def mock_get(*args, **kwargs):
-        class MockResp:
-            def raise_for_status(self):
-                # Méthode vide pour simuler une réponse sans erreur HTTP
-                pass
-            def json(self): return mock_response
-        return MockResp()
+    
+    mock_resp = AsyncMock()
+    mock_resp.raise_for_status.return_value = None
+    mock_resp.json.return_value = mock_response
 
-    mocker.patch("httpx.AsyncClient.get", new=mock_get)
+    # Patch httpx.AsyncClient.get pour retourner la réponse mockée
+    mocker.patch("httpx.AsyncClient.get", new=AsyncMock(return_value=mock_resp))
 
     result = service.get_forecast("Marseille")
 
