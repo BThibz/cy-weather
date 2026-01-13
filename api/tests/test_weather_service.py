@@ -1,6 +1,5 @@
 import math
 import pytest
-from datetime import datetime
 from unittest.mock import AsyncMock
 
 from src.services.weather_service import WeatherService
@@ -41,7 +40,7 @@ async def test_get_current_weather(service, mocker):
     )
 
     # --- Mock réponse API météo ---
-    mock_response = {
+    mock_response_data = {
         "current": {
             "temperature_2m": 20.0,
             "apparent_temperature": 21.0,
@@ -53,16 +52,18 @@ async def test_get_current_weather(service, mocker):
         }
     }
 
-    
+    # Mock de la réponse HTTP
     mock_resp = AsyncMock()
     mock_resp.raise_for_status.return_value = None
-    mock_resp.json.return_value = mock_response
+    mock_resp.json.return_value = mock_response_data
 
     # Patch httpx.AsyncClient.get pour retourner la réponse mockée
     mocker.patch("httpx.AsyncClient.get", return_value=mock_resp)
 
+    # --- Appel de la méthode ---
     result = await service.get_current_weather("Paris")
 
+    # --- Assertions ---
     assert isinstance(result, WeatherResponse)
     assert result.city == "Paris"
     assert math.isclose(result.weather.temperature, 20.0, rel_tol=1e-9)
@@ -82,7 +83,8 @@ async def test_get_forecast(service, mocker):
         AsyncMock(return_value=(43.3, 5.4, "Marseille", "FR")),
     )
 
-    mock_response = {
+    # --- Mock réponse API météo ---
+    mock_response_data = {
         "daily": {
             "time": ["2026-01-10", "2026-01-11"],
             "weather_code": [1, 3],
@@ -95,16 +97,18 @@ async def test_get_forecast(service, mocker):
         }
     }
 
-    
+    # Mock de la réponse HTTP
     mock_resp = AsyncMock()
     mock_resp.raise_for_status.return_value = None
-    mock_resp.json.return_value = mock_response
+    mock_resp.json.return_value = mock_response_data
 
     # Patch httpx.AsyncClient.get pour retourner la réponse mockée
     mocker.patch("httpx.AsyncClient.get", return_value=mock_resp)
 
+    # --- Appel de la méthode ---
     result = await service.get_forecast("Marseille")
 
+    # --- Assertions ---
     assert isinstance(result, ForecastResponse)
     assert len(result.forecast) == 2
     assert result.forecast[0].description == "Principalement dégagé"
