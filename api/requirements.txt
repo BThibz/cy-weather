@@ -146,6 +146,3 @@ websockets==16.0
     # via uvicorn
 prometheus-fastapi-instrumentator
     # prometheus
-pytest==8.0.0
-pytest-cov==5.0.0
-pytest-mock==3.14.0
